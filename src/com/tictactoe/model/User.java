@@ -24,6 +24,9 @@ public class User implements Serializable {
     private String password;
 
     private String email;
+    
+    @OneToOne
+    private TicTacToe game;
 
    
     public User() {
@@ -33,6 +36,7 @@ public class User implements Serializable {
         this.userName = userName;
         this.password = password;
         this.email = email;
+        this.game = new TicTacToe();
     }
 
     public Long getId() {
@@ -68,7 +72,15 @@ public class User implements Serializable {
     }
 
 
-    @Override
+    private TicTacToe getGame() {
+		return game;
+	}
+
+	private void setGame(TicTacToe game) {
+		this.game = game;
+	}
+
+	@Override
     public String toString() {
         String result = getClass().getSimpleName() + " ";
         if (userName != null && !userName.trim().isEmpty())

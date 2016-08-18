@@ -11,7 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.tictactoe.dao.TicTacToeDAO;
 import com.tictactoe.dao.UserDAO;
+import com.tictactoe.model.TicTacToe;
 import com.tictactoe.model.User;
 
 
@@ -27,6 +29,10 @@ public class UserManager {
     
     @Inject
     private CurrentUser currentUser;
+    
+    @Inject
+    private TicTacToeDAO game;
+   
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -74,4 +80,11 @@ public class UserManager {
 	public void logoutUser() {
 		currentUser.setUser(null);
 	}
+	
+	 @Path("move")
+	 @GET
+	 @Consumes(MediaType.TEXT_PLAIN)
+	 public void setMove() {
+		 game.getTicTacToe();
+	 }
 }
