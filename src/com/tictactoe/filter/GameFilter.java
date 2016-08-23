@@ -20,7 +20,7 @@ import com.tictactoe.services.CurrentUser;
 
 
 
-@WebFilter({"/play.html", "/NewGamePlayServlet", "/ResumeGamePlayServlet"})
+@WebFilter({"/play.html", "/NewGamePlayServlet", "/ResumeGamePlayServlet", "/BoardPositions", "/NextMove", "/BoardPositions"})
 public class GameFilter implements Filter {
 
     @Inject
