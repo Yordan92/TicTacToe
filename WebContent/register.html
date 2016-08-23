@@ -17,28 +17,26 @@
 	        return ;
 	    }
 	    
-	    var data = { user : {
+	    var data = {
 		            userName : username,
 		            password : password,
 		            email : email
-    			}
 	    }
 	    
 		$.ajax({
-		    url: 'rest/user',
+		    url: 'Register',
 		    type: "POST",
-		    contentType: "application/json;charset=UTF-8",
-		    data: JSON.stringify(data)
+		    contentType: "application/x-www-form-urlencoded",
+		    data: data
 		})
 		.success(function(data) {
 		    $("#register_form").attr("action", "index.html");
 		})
 		.fail(function(data) {
-		    $("#register_form").attr("action", "register.html");
-
+			alert(data.responseText);
 		})
 		.always(function() {
-                    $("#register_form").submit();
+            $("#register_form").submit();
         });
     }
 
@@ -63,7 +61,6 @@
 	<h1 align="center">
 		<b>REGISTRATION FORM</b>
 	</h1>
-
 	<form id="register_form" role="form" method="post">
 		<div class="form-group">
 			<label for="userName">Username:</label> <input type="text"

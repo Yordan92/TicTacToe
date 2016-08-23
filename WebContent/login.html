@@ -17,17 +17,16 @@
 	    	return;
 	    }
 	    
-	    var data = { user : {
+	    var data = {
 		            userName : username,
 		            password : password
-    			}
 	    }
 	
 	    $.ajax({
-		    url: 'rest/user/login',
+		    url: 'Login',
 		    type: "POST",
-		    contentType: "application/json;charset=UTF-8",
-		    data: JSON.stringify(data),
+		    contentType: "application/x-www-form-urlencoded",
+		    data: data,
 		    statusCode: {
 			        401: function() {
 			        	alert("Authentication failed");

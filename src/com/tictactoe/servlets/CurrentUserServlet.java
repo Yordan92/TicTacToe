@@ -1,8 +1,9 @@
-package com.sap.cloud.sample.persistence;
+package com.tictactoe.servlets;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.Arrays;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,17 +11,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.tictactoe.services.CurrentUser;
+
 /**
- * Servlet implementation class MoneyServlet
+ * Servlet implementation class CurrentUserServlet
  */
-@WebServlet("/MoneyServlet")
-public class MoneyServlet extends HttpServlet {
+@WebServlet("/Current")
+public class CurrentUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MoneyServlet() {
+	@Inject
+	CurrentUser currentUser;
+    public CurrentUserServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -28,12 +34,13 @@ public class MoneyServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    @Inject
-    Money money;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		request.getSession();
-		response.getWriter().append("Served at: ").append(money.getMoney());
+		if (currentUser.getUser() == null) {
+			response.setStatus(HttpURLConnection.HTTP_NOT_FOUND);
+			return;
+		}
+		response.getOutputStream().print(currentUser.getUser().getUserName());
 	}
 
 	/**
@@ -41,7 +48,7 @@ public class MoneyServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		
 	}
 
 }

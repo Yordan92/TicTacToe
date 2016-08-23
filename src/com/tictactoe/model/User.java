@@ -4,8 +4,12 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,18 +29,17 @@ public class User implements Serializable {
 
     private String email;
     
-    @OneToOne
-    private TicTacToe game;
+    @OneToMany(mappedBy="user")
+    private Set<Position> positions = new HashSet<>();;
 
    
     public User() {
     }
 
-    public User(String userName, String password, String email, Date dateOfBirth) {
+    public User(String userName, String password, String email) {
         this.userName = userName;
         this.password = password;
         this.email = email;
-        this.game = new TicTacToe();
     }
 
     public Long getId() {
@@ -71,22 +74,34 @@ public class User implements Serializable {
         this.email = email;
     }
 
-
-    private TicTacToe getGame() {
-		return game;
-	}
-
-	private void setGame(TicTacToe game) {
-		this.game = game;
-	}
-
+    public void addPosition(Position p) {
+    	positions.add(p);
+    }
+    
+    
+    public int[] getPositionsAsArray() {
+    	int board[] = new int[9];
+    	for(Position temp : positions) {
+    		board[temp.getX()*3 + temp.getY()] = temp.getPlayer();
+    	}
+    	return board;
+    }
+    
+    public Set<Position> getPosition() {
+    	return positions;
+    }
+    
+    public void removeAllPositions() {
+    	positions.clear();
+    }
 	@Override
     public String toString() {
         String result = getClass().getSimpleName() + " ";
         if (userName != null && !userName.trim().isEmpty())
             result += "userName: " + userName;
         if (password != null && !password.trim().isEmpty())
-            result += ", password: " + password;
+        	result += ", password: " + password;
+
         if (email != null && !email.trim().isEmpty())
             result += ", email: " + email;
         return result;

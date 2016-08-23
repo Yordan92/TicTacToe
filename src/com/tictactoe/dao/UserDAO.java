@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import com.tictactoe.model.Position;
 import com.tictactoe.model.User;
 
 
@@ -22,12 +23,12 @@ public class UserDAO {
         em.persist(user);
     }
 
-    public boolean validateUserCredentials(String userName, String password) {
+    public User getUserByCredentials(String userName, String password) {
         String txtQuery = "SELECT u FROM User u WHERE u.userName=:userName AND u.password=:password";
         TypedQuery<User> query = em.createQuery(txtQuery, User.class);
         query.setParameter("userName", userName);
         query.setParameter("password", getHashedPassword(password));
-        return queryUser(query) != null;
+        return queryUser(query);
     }
 
     public User findUserByName(String userName) {
@@ -36,6 +37,7 @@ public class UserDAO {
         query.setParameter("userName", userName);
         return queryUser(query);
     }
+    
 
     private User queryUser(TypedQuery<User> query) {
         try {
@@ -54,4 +56,9 @@ public class UserDAO {
         }
         return password;
     }
-}
+
+	public void update(User user) {
+		em.merge(user);
+		
+	}
+} 

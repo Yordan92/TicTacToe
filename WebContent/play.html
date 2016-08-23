@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="styles/tictactoe.css" />
+<script src="js/lodash.js"></script>
+</head>
+<body onload="takePlayerPositions()">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header" style="width: 100%">
+				<a href="index.html">Go Home</a>
+				<button onclick="logout()" class="logout btn pull-right">
+					Logout
+				</button>
+			</div>
+		</div>
+	</nav>
+	<p id="winner-message" class="bg-info"></p>
+	<div class="tictactoe-board">
+		<div>
+			<div class="row">
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="0">
+					
+				</div>
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="1">
+					
+				</div>
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="2">
+				
+				</div>
+			</div>
+			<div class="row">
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="3">
+					
+				</div>
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="4">
+					
+				</div>
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="5">
+					
+				</div>
+			</div>
+			<div class="row">
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="6">
+					
+				</div>
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4" data-index="7">
+					
+				</div>
+				<div class="column col-lg-4 col-md-4 col-sm-4 col-xs-4	" data-index="8">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script src="js/jquery-2.1.3.min.js"></script>
+<script>
+	function drawBoardPositions(result) {
+		_.forEach($('.column'), function(columnEl) {
+			var jqueryObj = $(columnEl);
+			if (result[jqueryObj.data().index] === 1) {
+				jqueryObj.addClass("marked-x");
+			} else if(result[jqueryObj.data().index] === 2) {
+				jqueryObj.addClass("marked-o");
+			}
+		});
+	}
+	
+	function onClick(event) {
+		$.ajax({
+		    url: 'NextMove',
+		    type: 'GET',
+		    data: $(event.target).data(),
+		    contentType: "application/json",
+		    success: successHandler
+		});
+	}
+	
+	function successHandler(result) {
+		drawBoardPositions(result.board)
+		$('#winner-message').hide();
+		if (result.winMessage) {
+			$('#winner-message').show().text(result.winMessage);
+			$('.tictactoe-board').off('click', onClick);
+		} 
+			
+	}
+	function takePlayerPositions() {
+		$.ajax({
+		    url: 'BoardPositions',
+		    type: 'GET',
+		    contentType: "application/json",
+		    success: successHandler
+	    });
+	}
+	$('.tictactoe-board').on('click', onClick);
+</script>
+</html>

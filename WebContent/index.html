@@ -3,64 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript">
-    isUserAuthenticated = false;
-
-	$(document).ready(function() {
-		$.ajax({
-		    url: 'rest/user/authenticated',
-		    type: "GET",
-            dataType : "json",
-		    statusCode: {
-			        200: function() {
-			        	$( ".login_register" ).hide();
-                        isUserAuthenticated = true;
-			        },
-			        404: function() {
-			        	$('.logout').hide();
+	<link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="styles/tictactoe.css" />
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript">
+	    isUserAuthenticated = false;
+	
+		$(document).ready(function() {
+			$.ajax({
+			    url: 'Current',
+			    type: "GET",
+	            dataType : "json",
+			    statusCode: {
+				        200: function(data) {
+				        	$("#user-holder").text(data.responseText);
+				            $( ".login_register" ).hide();
+				            $("#game-buttons").show();
+				            
+	                        isUserAuthenticated = true;
+				        },
+				        404: function() {
+				        	$(".welcome-greeting").hide();
+				            $('.logout').hide();
+				            $("#game-buttons").hide();
+				        }
 			        }
-		        }
-		    });
-        drawTableWithBooks();
-
-        $.ajax({
-            url: 'rest/user/current',
-            type: "GET",
-            dataType : "text"
-        }).always(function(data){
-            if (typeof data != 'undefined') {
-                $("#user-holder").text(data);
-            } else {
-                $(".welcome-greeting").hide();
-            }
-        });
-	});
-
-    
-    function logout() {
-    	$.ajax({
-            url: 'rest/user/logout',
-            type: "GET",
-            dataType: "text"
-        }).always(function(data){
-        	window.location.replace("login.html");
-        });
-    }
-
-</script>
+			    });
+		});
+	    
+	    function logout() {
+	    	$.ajax({
+	            url: 'LogOut',
+	            type: "GET",
+	            dataType: "text"
+	        }).always(function(data){
+	        	window.location.replace("login.html");
+	        });
+	    }
+	
+	</script>
 </head>
 <body>
-	<div class="login_register">
-		<a href="login.html">Log In</a>
-		<a href="register.html">Register</a>
-	</div>
-	<div class="logout">
-		<a onclick="logout()"> Logout </a>
-	</div>
-    <div class="welcome-greeting">Welcome <span id="user-holder"></span> !</div>
-    <div>
-    	<a href="rest/game/resume">Resume game</a>
-    	<a href="rest/game/newgame">New Game</a>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header" style="width: 100%">
+				<div class="login_register">
+					<a href="login.html">Log In</a>
+					<a href="register.html">Register</a>
+				</div>
+				<div class="form-horizontal">
+					<span class="welcome-greeting">Welcome <span id="user-holder"></span> !</span>
+					<button onclick="logout()" class="logout btn pull-right">
+						Logout
+					</button>
+				</div>
+			</div>
+		</div>
+	</nav>
+   
+    <div id="game-buttons" class="btn-group" role="group">
+    	<a href="ResumeGamePlayServlet" class="btn btn-lg" role="button">Resume game</a>
+    	<a href="NewGamePlayServlet" class="btn btn-lg" role="button">New Game</a>
     </div>
 	
 	
